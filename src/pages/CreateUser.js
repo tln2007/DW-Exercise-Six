@@ -1,9 +1,11 @@
 import React from 'react';
+import CreateUserForm from "../components/CreateUserForm"
 
 function CreateUserPage() {
     return (
-    <div>
+    <div className='PageWrapper'>
         <h1>Create User</h1>
+        <CreateUserForm />
     </div>
     );
 }

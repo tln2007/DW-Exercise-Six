@@ -29,7 +29,7 @@ const router = createBrowserRouter([
   },
   {
     path: "/login",
-    element: <LoginPage />,
+    element: <LoginPage jsLoggedIn={isLoggedIn} />,
   },
   {
     path: "/create",
@@ -69,6 +69,10 @@ function App() {
     }
   }, [appInitialized]);
 
+  const router = createBrowserRouter([
+
+  ])
+  
   return (
     <div className="App">
       <Header />

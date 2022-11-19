@@ -22,60 +22,79 @@ const firebaseConfig = {
   appId: "1:175079140701:web:ecbe6acc486a9c35f64cb4"
 };
 
-const router = createBrowserRouter([
-  {
-    path: "/",
-    element: <UserProfilePage />,
-  },
-  {
-    path: "/login",
-    element: <LoginPage jsLoggedIn={isLoggedIn} />,
-  },
-  {
-    path: "/create",
-    element: <CreateUserPage />,
-  },
-]);
-
 function App() {
   const [appInitialized, setAppInitialized] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userInformation, setUserInformation] = useState({});
 
+  const router = createBrowserRouter([
+    {
+      path: "/",
+      element: (
+        <UserProfilePage 
+          isLoading={isLoading} 
+          isLoggedIn={isLoggedIn} 
+          userInformation={userInformation}
+          setIsLoggedIn={setIsLoggedIn} 
+          setUserInformation={setUserInformation}
+         />
+      ),
+    },
+    {
+        path: "/login",
+        element: (
+          <LoginPage 
+            isLoading={isLoading} 
+            isLoggedIn={isLoggedIn}
+            setIsLoggedIn={setIsLoggedIn} 
+            setUserInformation={setUserInformation}
+          />
+        ),//prop isLoggedIn tells us if false, go to login or create, if true, go to user profile
+    },
+    {
+        path: "/create",
+        element: (
+          <CreateUserPage 
+            isLoading={isLoading}
+            isLoggedIn={isLoggedIn}
+            setIsLoggedIn={setIsLoggedIn} 
+            setUserInformation={setUserInformation} />
+        ),
+    },
+  ]);
+  //ensure app is initialized when it is ready to be
+  useEffect(() => { //only do after first render
+    //initialize firebase
+    initializeApp(firebaseConfig);
+    setAppInitialized(true);
+  }, [])
+
+  //check to see if user is logged in
+  //if logged in, load page and check user status
+  //set state accordingly
   useEffect(() => {
-    initializeApp(firebaseConfig)
-    setAppInitialized(true)
-  }, []);
-  // Check to see if User is logged in
-  // User loads page, check their status
-  // Set state accordingly 
-  useEffect(() => {
-    if (appInitialized) {
+    if(appInitialized) {
       const auth = getAuth();
-      onAuthStateChanged(auth, (user) => {
-        if (user) {
-          // User is signed in
+      onAuthStateChanged(auth, (user) =>{
+        if(user) {
+          //user is signed in, see docs for a list of available properties
           setUserInformation(user);
           setIsLoggedIn(true);
-        } else {
-          // User is signed out 
+        }
+        else {
+          //user is signed out
           setUserInformation({});
           setIsLoggedIn(false);
         }
-        // Whenever state changes setLoading to false
+        //whenever state changes setLoading to false
         setIsLoading(false);
-      });
+      })
     }
-  }, [appInitialized]);
+  }, [appInitialized])
 
-  const router = createBrowserRouter([
-
-  ])
-  
   return (
     <div className="App">
-      <Header />
       <RouterProvider router={router} />
     </div>
   );

@@ -38,7 +38,7 @@ function LoginPage({ isLoggedIn, setIsLoggedIn, setUserInformation }) {
                 console.warn({error, errorCode, errorMessage});
                 setErrors(errorMessage);
             })
-    }, []);
+    }, [setIsLoggedIn, setUserInformation]);
 
     return (
         <>

@@ -50,6 +50,7 @@ function LoginPage({ isLoggedIn, setIsLoggedIn, setUserInformation }) {
             <div className='PageWrapper'>
                 <h1>Login</h1>
                 <LoginForm loginUser={loginUser}/>
+                <p>{errors}</p>
             </div>
         </>
     );
